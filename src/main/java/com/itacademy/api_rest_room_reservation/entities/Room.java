@@ -1,4 +1,4 @@
-package com.itacademy.api_rest_room_reservation.entity;
+package com.itacademy.api_rest_room_reservation.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

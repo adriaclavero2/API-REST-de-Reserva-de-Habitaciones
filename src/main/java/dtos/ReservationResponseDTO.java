@@ -1,5 +1,6 @@
 package dtos;
 
+import com.itacademy.api_rest_room_reservation.enums.ReservationStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public class ReservationResponseDTO {
 
     private LocalDate endDate;
 
-    private String status;
+    private ReservationStatus status;
 
     private LocalDateTime createdAt;
 }

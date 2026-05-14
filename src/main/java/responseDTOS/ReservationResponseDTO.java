@@ -1,4 +1,4 @@
-package dtos;
+package responseDTOS;
 
 import com.itacademy.api_rest_room_reservation.enums.ReservationStatus;
 import lombok.Data;

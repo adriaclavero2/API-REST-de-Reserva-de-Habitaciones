@@ -1,7 +1,7 @@
 package com.itacademy.api_rest_room_reservation.mappers;
 
 import com.itacademy.api_rest_room_reservation.entities.Reservation;
-import dtos.ReservationResponseDTO;
+import responseDTOS.ReservationResponseDTO;
 import org.springframework.stereotype.Component;
 
 @Component

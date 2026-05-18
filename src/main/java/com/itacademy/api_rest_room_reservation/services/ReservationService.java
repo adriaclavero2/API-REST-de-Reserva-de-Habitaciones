@@ -4,6 +4,8 @@ import com.itacademy.api_rest_room_reservation.entities.Reservation;
 import com.itacademy.api_rest_room_reservation.entities.Room;
 import com.itacademy.api_rest_room_reservation.entities.User;
 import com.itacademy.api_rest_room_reservation.enums.ReservationStatus;
+import com.itacademy.api_rest_room_reservation.exceptions.ConflictException;
+import com.itacademy.api_rest_room_reservation.exceptions.ResourceNotFoundException;
 import com.itacademy.api_rest_room_reservation.mappers.ReservationMapper;
 import com.itacademy.api_rest_room_reservation.repositories.ReservationRepository;
 import com.itacademy.api_rest_room_reservation.repositories.RoomRepository;
@@ -42,9 +44,9 @@ public class ReservationService {
         validator.validateUserAvailability(dto.getUserId(), dto.getStartDate(), dto.getEndDate());
 
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Not Found: User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found: User not found"));
         Room room = roomRepository.findById(dto.getRoomId())
-                .orElseThrow(() -> new RuntimeException("Not Found: Room not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found: Room not found"));
 
         Reservation reservation = reservationMapper.toEntity(dto, user, room);
         Reservation savedReservation = reservationRepository.save(reservation);
@@ -54,10 +56,10 @@ public class ReservationService {
 
     public void cancelReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not Found: Reservation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found: Reservation not found"));
 
         if (reservation.getStatus() == ReservationStatus.CANCELLED) {
-            throw new RuntimeException("Conflict: Reservation is already cancelled");
+            throw new ConflictException("Conflict: Reservation is already cancelled");
         }
 
         reservation.setStatus(ReservationStatus.CANCELLED);
@@ -74,7 +76,7 @@ public class ReservationService {
 
     public List<ReservationResponseDTO> getReservationsByUserId(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("Not Found: User not found");
+            throw new ResourceNotFoundException("Not Found: User not found");
         }
         return reservationRepository.findByUserId(userId).stream()
                 .map(reservationMapper::toDTO)

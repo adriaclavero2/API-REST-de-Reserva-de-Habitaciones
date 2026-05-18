@@ -1,6 +1,8 @@
 package com.itacademy.api_rest_room_reservation.services;
 
 import com.itacademy.api_rest_room_reservation.entities.User;
+import com.itacademy.api_rest_room_reservation.exceptions.ConflictException;
+import com.itacademy.api_rest_room_reservation.exceptions.ResourceNotFoundException;
 import com.itacademy.api_rest_room_reservation.mappers.UserMapper;
 import com.itacademy.api_rest_room_reservation.repositories.UserRepository;
 import com.itacademy.api_rest_room_reservation.requestDTOS.UserRequestDTO;
@@ -23,7 +25,7 @@ public class UserService {
 
     public UserResponseDTO createUser(UserRequestDTO requestDTO) {
         if (userRepository.existsByEmail(requestDTO.getEmail())) {
-            throw new RuntimeException("Conflict: Email already in use");
+            throw new ConflictException("Conflict: Email already in use");
         }
         User userToSave = userMapper.toEntity(requestDTO);
         User savedUser = userRepository.save(userToSave);
@@ -39,7 +41,7 @@ public class UserService {
 
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not Found: User with id "
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found: User with id "
                         + id + " does not exist"));
         return userMapper.toDTO(user);
     }

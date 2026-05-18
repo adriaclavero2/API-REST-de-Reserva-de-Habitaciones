@@ -1,6 +1,8 @@
 package com.itacademy.api_rest_room_reservation.services;
 
 import com.itacademy.api_rest_room_reservation.entities.Room;
+import com.itacademy.api_rest_room_reservation.exceptions.ConflictException;
+import com.itacademy.api_rest_room_reservation.exceptions.ResourceNotFoundException;
 import com.itacademy.api_rest_room_reservation.mappers.RoomMapper;
 import com.itacademy.api_rest_room_reservation.repositories.RoomRepository;
 import com.itacademy.api_rest_room_reservation.requestDTOS.RoomRequestDTO;
@@ -23,7 +25,7 @@ public class RoomService {
     
     public RoomResponseDTO createRoom(RoomRequestDTO requestDTO) {
         if (roomRepository.existsByRoomNumber(requestDTO.getRoomNumber())) {
-            throw new RuntimeException("Conflict: Room number already exists");
+            throw new ConflictException("Conflict: Room number already exists");
         }
         Room roomToSave = roomMapper.toEntity(requestDTO);
         Room savedRoom = roomRepository.save(roomToSave);
@@ -39,7 +41,7 @@ public class RoomService {
 
     public RoomResponseDTO getRoomById(Long id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not Found: Room with id "
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found: Room with id "
                         + id + " does not exist"));
         return roomMapper.toDTO(room);
     }

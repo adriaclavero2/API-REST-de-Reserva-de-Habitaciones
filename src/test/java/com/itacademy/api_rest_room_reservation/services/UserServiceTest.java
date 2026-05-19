@@ -66,12 +66,12 @@ class UserServiceTest {
 
     @Test
     void getUserById_ShouldThrowNotFoundException_WhenUserDoesNotExist() {
-        Long fakeId = 99L;
+        Long falseId = 99L;
 
-        when(userRepository.findById(fakeId)).thenReturn(Optional.empty());
+        when(userRepository.findById(falseId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            userService.getUserById(fakeId);
+            userService.getUserById(falseId);
         });
     }
 }

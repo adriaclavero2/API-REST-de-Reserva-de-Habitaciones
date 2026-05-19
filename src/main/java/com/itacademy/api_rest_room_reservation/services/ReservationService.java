@@ -82,4 +82,10 @@ public class ReservationService {
                 .map(reservationMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public ReservationResponseDTO getReservationById(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+        return reservationMapper.toDTO(reservation);
+    }
 }
